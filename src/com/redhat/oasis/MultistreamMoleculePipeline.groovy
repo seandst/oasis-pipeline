@@ -203,7 +203,8 @@ class MultistreamMoleculePipeline implements Serializable {
 
                 // Also install and additional python/galaxy deps listed in the repo
                 if (job.fileExists('requirements.txt')) {
-                    job.venvSh('.venv', ['pip install -r requirements.txt'])
+                    constraints = job.fileExists('constraints.txt') ? ' -c constraints.txt' : ''
+                    job.venvSh('.venv', ["pip install -r requirements.txt${constraints}"])
                 }
                 if (job.fileExists('requirements.yml')) {
                     job.venvSh('.venv', ['ansible-galaxy install -r requirements.yml'])
